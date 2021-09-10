@@ -1,0 +1,40 @@
+---
+- hosts: test
+  become: true 
+
+  tasks:
+    - name: install apache
+      yum: pkg=apache2 state=latest
+
+    - name: copy html file 
+      template: 
+        src: index.html.j2 
+        dest: /var/www/html/index.html
+    - name: allow ufw on port 8080
+      ufw: 
+        rule: allow
+        port: '8080'
+        proto: tcp
+
+    - name: set up apache environment 
+      template:
+        src: apache.conf.j2
+        dest: /etc/apache2/sites-available/000-default.conf
+    - name: change ports 
+      template: 
+        src: ports.conf.j2
+        dest: /etc/apache2/ports.conf
+    # - name: undeplys apache
+    #   service:
+    #     name: apache2
+    #     state: stopped
+
+  handlers: 
+    - name: Reload Apache
+      service:
+        name: apache2
+        state: reloaded
+    - name: Restart Apache
+      service:
+        name: apache2
+        state: restarted
