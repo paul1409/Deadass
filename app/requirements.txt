@@ -48,6 +48,7 @@ Pygments==2.10.0
 pyparsing==2.4.7
 pyrsistent==0.18.0
 PySocks==1.7.1
+pytest==6.2.5
 python-dateutil==2.8.2
 pyzmq==22.3.0
 qtconsole==5.1.1
@@ -66,3 +67,4 @@ wcwidth==0.2.5
 webencodings==0.5.1
 Werkzeug==2.0.1
 widgetsnbextension==3.5.1
+configparser==5.0.2
