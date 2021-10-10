@@ -1,0 +1,23 @@
+.navbar-default {
+    background-color: #0B77BD;
+
+}
+
+li a {
+    color: #FFFFFF;
+}
+
+
+.wrap {
+    z-index: 9999;
+    position: absolute;
+    margin: 0 auto;
+    width: 100%;
+}
+
+
+.form-group {
+    color: white;
+    margin: 0 auto;
+    width: 50%;
+}
