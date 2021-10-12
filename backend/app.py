@@ -17,6 +17,7 @@ SSO_ATTRIBUTE_MAP = {
 app.config['SSO_ATTRIBUTE_MAP'] = SSO_ATTRIBUTE_MAP
 app.secret_key = 'a_super_secret_key'
 
+
 @app.route('/')
 def index():
     if 'user' in session:
@@ -30,6 +31,13 @@ def index():
 def login():
     session['user'] = True
     return render_template('')
-    
+
+
+@app.route('/logout')
+def logout():
+    session.pop('user', None)
+    return render_template('index.html')
+
+
 if __name__ == '__main__':
     app.run(debug=True)
