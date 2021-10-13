@@ -30,7 +30,12 @@ def index():
 @app.route('/login')
 def login():
     session['user'] = True
-    return render_template('')
+    return render_template('table.html')
+
+
+@app.route('/table')
+def table():
+    return render_template('table.html')
 
 
 @app.route('/logout')
