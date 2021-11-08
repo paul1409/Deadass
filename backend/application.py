@@ -1,7 +1,7 @@
 from flask import Flask, render_template, session
 from flask_sso import SSO
 
-application = Flask(__name__)
+application = app = Flask(__name__)
 sso = SSO(app=application)
 
 SSO_ATTRIBUTE_MAP = {
