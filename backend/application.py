@@ -1,8 +1,8 @@
 from flask import Flask, render_template, session
 from flask_sso import SSO
 
-app = Flask(__name__)
-sso = SSO(app=app)
+application = Flask(__name__)
+sso = SSO(app=application)
 
 SSO_ATTRIBUTE_MAP = {
     'ADFS_AUTHLEVEL': (False, 'authlevel'),
@@ -14,11 +14,11 @@ SSO_ATTRIBUTE_MAP = {
     'HTTP_SHIB_AUTHENTICATION_METHOD': (False, 'authmethod'),
 }
 
-app.config['SSO_ATTRIBUTE_MAP'] = SSO_ATTRIBUTE_MAP
-app.secret_key = 'a_super_secret_key'
+application.config['SSO_ATTRIBUTE_MAP'] = SSO_ATTRIBUTE_MAP
+application.secret_key = 'a_super_secret_key'
 
 
-@app.route('/')
+@application.route('/')
 def index():
     if 'user' in session:
         #return 'Welcome {name}'.format(name=session['user']['nickname'])
@@ -27,22 +27,22 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/login')
+@application.route('/login')
 def login():
     session['user'] = True
     return render_template('table.html')
 
 
-@app.route('/table')
+@application.route('/table')
 def table():
     return render_template('table.html')
 
 
-@app.route('/logout')
+@application.route('/logout')
 def logout():
     session.pop('user', None)
     return render_template('index.html')
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    application.run(debug=True)
