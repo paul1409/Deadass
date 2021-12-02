@@ -38,6 +38,21 @@ def table():
     return render_template('table.html')
 
 
+@app.route('/genderVisualizations')
+def visualizations():
+    return render_template('gender.html')
+
+
+@app.route('/ageVisualizations')
+def ageVisualizations():
+    return render_template('age.html')
+
+
+@app.route('/salaryVisualizations')
+def salaryVisualizations():
+    return render_template('salary.html')
+
+
 @application.route('/logout')
 def logout():
     session.pop('user', None)
