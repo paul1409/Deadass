@@ -43,7 +43,6 @@ var x_scale = d3.scaleLinear()
     .range([padding, chart_width - padding * 2]);
 
 var y_scale = d3.scaleLinear()
-    //.domain([6000, 30000])
     .domain([d3.min(data, function (d) {
         return d[1] - 1000;
     }), d3.max(data, function (d) {
