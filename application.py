@@ -33,20 +33,22 @@ GOOGLE_DISCOVERY_URL = (
 
 
 application = Flask(__name__)
-sso = SSO(app=application)
-
-SSO_ATTRIBUTE_MAP = {
-    'ADFS_AUTHLEVEL': (False, 'authlevel'),
-    'ADFS_GROUP': (True, 'group'),
-    'ADFS_LOGIN': (True, 'nickname'),
-    'ADFS_ROLE': (False, 'role'),
-    'ADFS_EMAIL': (True, 'email'),
-    'ADFS_IDENTITYCLASS': (False, 'external'),
-    'HTTP_SHIB_AUTHENTICATION_METHOD': (False, 'authmethod'),
-}
-
-application.config['SSO_ATTRIBUTE_MAP'] = SSO_ATTRIBUTE_MAP
 application.secret_key = os.environ.get("SECRET_KEY") or os.urandom(24)
+
+# sso = SSO(app=application)
+
+# SSO_ATTRIBUTE_MAP = {
+#     'ADFS_AUTHLEVEL': (False, 'authlevel'),
+#     'ADFS_GROUP': (True, 'group'),
+#     'ADFS_LOGIN': (True, 'nickname'),
+#     'ADFS_ROLE': (False, 'role'),
+#     'ADFS_EMAIL': (True, 'email'),
+#     'ADFS_IDENTITYCLASS': (False, 'external'),
+#     'HTTP_SHIB_AUTHENTICATION_METHOD': (False, 'authmethod'),
+# }
+
+# application.config['SSO_ATTRIBUTE_MAP'] = SSO_ATTRIBUTE_MAP
+# application.secret_key = os.environ.get("SECRET_KEY") or os.urandom(24)
 #application.secret_key = 'a_super_secret_key'
 login_manager = LoginManager()
 login_manager.init_app(application)
@@ -60,6 +62,7 @@ except sqlite3.OperationalError:
 
 # OAuth 2 client setup
 client = WebApplicationClient(GOOGLE_CLIENT_ID)
+print(client)
 
 # Flask-Login helper to retrieve a user from our db
 @login_manager.user_loader
@@ -71,23 +74,26 @@ def load_user(user_id):
 
 @application.route('/')
 def index():
-    if 'user' in session:
-        #return 'Welcome {name}'.format(name=session['user']['nickname'])
-        # return render_template('table.html')
-        return render_template('index.html')
+    # if 'user' in session:
+    #     #return 'Welcome {name}'.format(name=session['user']['nickname'])
+    #     # return render_template('table.html')
+    #     return render_template('index.html')
 
     if current_user.is_authenticated:
-        return (
-            "<p>Hello, {}! You're logged in! Email: {}</p>"
-            "<div><p>Google Profile Picture:</p>"
-            '<img src="{}" alt="Google profile pic"></img></div>'
-            '<a class="button" href="/logout2">Logout</a>'.format(
-                current_user.name, current_user.email, current_user.profile_pic
-            )
-        )
+        # return (
+        #     "<p>Hello, {}! You're logged in! Email: {}</p>"
+        #     "<div><p>Google Profile Picture:</p>"
+        #     '<img src="{}" alt="Google profile pic"></img></div>'
+        #     '<a class="button" href="/logout2">Logout</a>'.format(
+        #         current_user.name, current_user.email, current_user.profile_pic
+        #     )
+        # )
+        print('success')
+        return render_template('table.html', user_name=current_user.name)
+
     else:
         return '<a class="button" href="/login2">Google Login</a>'
-    return render_template('index.html')
+    return 'fail'#render_template('index.html')
 
 def get_google_provider_cfg():
     return requests.get(GOOGLE_DISCOVERY_URL).json()
@@ -180,55 +186,47 @@ def callback():
 
 @application.route("/logout2")
 @login_required
-def logout():
+def logout2():
     logout_user()
     return redirect(url_for("index"))
+'''
+original application code
+'''
+@application.route('/login')
+def login():
+    session['user'] = True
+    return render_template('table.html')
+
+
+@application.route('/table')
+def table():
+    return render_template('table.html')
+
+
+@application.route('/genderVisualizations')
+def visualizations():
+    return render_template('gender.html')
+
+
+@application.route('/ageVisualizations')
+def ageVisualizations():
+    return render_template('age.html')
+
+
+@application.route('/salaryVisualizations')
+def salaryVisualizations():
+    return render_template('salary.html')
+
+
+@application.route('/logout')
+def logout():
+    session.pop('user', None)
+    return render_template('index.html')
 
 
 
 if __name__ == "__main__":
     application.run(ssl_context="adhoc")
-
-
-
-
-
-
-
-
-
-
-# @application.route('/login')
-# def login():
-#     session['user'] = True
-#     return render_template('table.html')
-
-
-# @application.route('/table')
-# def table():
-#     return render_template('table.html')
-
-
-# @app.route('/genderVisualizations')
-# def visualizations():
-#     return render_template('gender.html')
-
-
-# @app.route('/ageVisualizations')
-# def ageVisualizations():
-#     return render_template('age.html')
-
-
-# @app.route('/salaryVisualizations')
-# def salaryVisualizations():
-#     return render_template('salary.html')
-
-
-# @application.route('/logout')
-# def logout():
-#     session.pop('user', None)
-#     return render_template('index.html')
-
 
 # if __name__ == '__main__':
 #     application.run(debug=True)
